@@ -125,6 +125,7 @@ void intCheckMemcheck()
 	}
 }
 
+static int print_me = 0;
 static void execI()
 {
 	// check if any breakpoints or memchecks are triggered by this instruction
@@ -144,6 +145,18 @@ static void execI()
 		debugI();
 
 	const OPCODE& opcode = GetCurrentInstruction();
+#if 0
+	if (cpuRegs.pc == 0x80000000) {
+		//print_me = 2000;
+	}
+	if (print_me) {
+		print_me--;
+		disOut.clear();
+		disR5900Fasm(disOut, cpuRegs.code, pc);
+		//opcode.disasm( disOut );
+		CPU_LOG( disOut.c_str() );
+	}
+#endif
 	//use this to find out what opcodes your game uses. very slow! (rama)
 	//runs++;
 	//if (runs > 1599999999){ //leave some time to startup the testgame
