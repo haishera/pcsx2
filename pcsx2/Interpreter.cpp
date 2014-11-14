@@ -479,23 +479,31 @@ static void intEventTest()
 
 static void intExecute()
 {
-	try {
-		if (g_SkipBiosHack) {
-			do
-				execI();
-			while (cpuRegs.pc != EELOAD_START);
-			eeloadReplaceOSDSYS();
+	bool tlb_miss;
+	do {
+		tlb_miss = false;
+		try {
+			if (g_SkipBiosHack) {
+				do
+					execI();
+				while (cpuRegs.pc != EELOAD_START);
+				eeloadReplaceOSDSYS();
+			}
+			if (ElfEntry != 0xFFFFFFFF) {
+				do
+					execI();
+				while (cpuRegs.pc != ElfEntry);
+				eeGameStarting();
+			} else {
+				while (true)
+					execI();
+			}
 		}
-		if (ElfEntry != 0xFFFFFFFF) {
-			do
-				execI();
-			while (cpuRegs.pc != ElfEntry);
-			eeGameStarting();
-		} else {
-			while (true)
-				execI();
-		}
-	} catch( Exception::ExitCpuExecute& ) { }
+		catch( Exception::ExitCpuExecute& ) { }
+		catch( Exception::ExitCpuAfterTlbMiss& ) { tlb_miss = true; }
+
+		// A tlb miss will throw an exception. Cpu must be resumed to execute the handler
+	} while (tlb_miss);
 }
 
 static void intCheckExecutionState()
