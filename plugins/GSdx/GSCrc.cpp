@@ -507,6 +507,9 @@ CRC::Game CRC::m_games[] =
 	{0xBDD9BAAD, UrbanReign, US, 0}, // cutie comment
 	{0xAE4BEBD3, UrbanReign, EU, 0},
 	{0x9F391882, SteambotChronicles, US, 0},
+	{0xB7CC827C, SteambotChronicles, JP, 0},
+	{0x520E3776, SteambotChronicles, JP, 0},//PachiPara_13
+	{0xE53A5C23, SteambotChronicles, JP, 0},//PachiPara_14
 	{0x06A7506A, SacredBlaze, JP, 0},
 };
 
